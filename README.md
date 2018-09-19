@@ -8,3 +8,9 @@
 - elasticsearch-2.4.6
 - kibana-5.6.10
 - logstash-6.3.1
+
+
+- ELASTIC_VERSION=2.4.6
+- KIBANA_VERSION=5.6.10
+- LOGSTASH_VERSION=6.3.1
+- ES_JVM_HEAP=1024m
