@@ -1,0 +1,10 @@
+--docker-compose build
+--docker-compose up
+--winpty docker exec -it d07f23243261 sh
+--[Remove all images] docker rm $(docker ps -a -q)
+- Create an image ( docker build -t [imagename] . )
+-docker build -t logstashtest .
+
+-elasticsearch-2.4.6
+-kibana-5.6.10
+-logstash-6.3.1
