@@ -37,7 +37,7 @@ services:
   elasticsearch:
     container_name: elasticsearch
     hostname: elasticsearch
-    image: "elasticsearch:${ELASTIC_VERSION}"    
+    image: "elasticsearch:2.4.6"    
     volumes:
       - ./elasticsearch/data:/usr/share/elasticsearch/data
     ports:
@@ -47,17 +47,22 @@ services:
       - http.host=0.0.0.0
       - transport.host=127.0.0.1
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms${ES_JVM_HEAP} -Xmx${ES_JVM_HEAP}"
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
       
 # Kibana     
   kibana:
+    build:
+      context: ./kibana/
+      dockerfile: Dockerfile
     container_name: kibana
     hostname: kibana
-    image: "docker.elastic.co/kibana/kibana:${KIBANA_VERSION}"
+    image: "kibana:4.6.6"
     volumes:
       - .\config\kibana\kibana.yml:/usr/share/kibana/kibana.yml
     ports: ['5601:5601']
     depends_on: ['elasticsearch']
+    environment:
+      - "ELASTICSEARCH_PASSWORD=changeme"
  
 
 # Logstatsh    
