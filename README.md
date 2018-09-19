@@ -9,6 +9,7 @@
 - kibana-5.6.10
 - logstash-6.3.1
 
+# .env
 
 - ELASTIC_VERSION=2.4.6
 - KIBANA_VERSION=5.6.10
