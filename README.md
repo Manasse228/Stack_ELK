@@ -1,6 +1,6 @@
 - docker-compose build
 - docker-compose up
-- winpty docker exec -it d07f23243261 sh
+- winpty docker exec -it d07f23243261 sh [to navigate an image]
 - [Remove all images] docker rm $(docker ps -a -q)
 - Create an image ( docker build -t [imagename] . )
 - docker build -t logstashtest .
