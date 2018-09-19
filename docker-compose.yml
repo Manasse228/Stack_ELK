@@ -1,0 +1,82 @@
+version: '3.1'
+
+services:
+
+# Mysqldb
+  mysqldb:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=springtamarin
+      - MYSQL_USER=dbuser
+      - MYSQL_PASSWORD=dbp4ss
+      - MYSQL_ROOT_HOST= %
+    volumes:
+      - ./data:/var/lib/mysql
+
+# Phpmyadmin     
+  phpmyadmin:
+    restart: always
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    hostname: localhost
+    ports:
+      - 8000:80
+    environment:
+      - PMA_HOST=mysqldb
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    depends_on:
+      - mysqldb
+      
+# Elasticsearch   
+  elasticsearch:
+    container_name: elasticsearch
+    hostname: elasticsearch
+    image: "elasticsearch:${ELASTIC_VERSION}"    
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=127.0.0.1
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms${ES_JVM_HEAP} -Xmx${ES_JVM_HEAP}"
+      
+# Kibana     
+  kibana:
+    container_name: kibana
+    hostname: kibana
+    image: "docker.elastic.co/kibana/kibana:${KIBANA_VERSION}"
+    volumes:
+      - .\config\kibana\kibana.yml:/usr/share/kibana/kibana.yml
+    ports: ['5601:5601']
+    depends_on: ['elasticsearch']
+ 
+
+# Logstatsh    
+  logstash:
+    build:
+      context: ./logstash/
+      dockerfile: Dockerfile
+    container_name: logstashtest
+    image: logstashtest
+    links: 
+      - elasticsearch    
+    ports:
+      - "9600:9600"
+    depends_on:
+      - elasticsearch 
+      - mysqldb 
+
+
+
+
+
+
